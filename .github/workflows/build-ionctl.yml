@@ -1,4 +1,4 @@
-name: Build Ionctl AOT (Linux)
+name: Build Ionctl (Linux)
 
 on:
   push:
@@ -23,26 +23,21 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
-      - name: Install native deps
-        run: |
-          sudo apt-get update
-          sudo apt install musl musl-dev clang lld zlib1g-dev
-
       - name: Restore dependencies
         run: dotnet restore ./src/src.sln
 
-      - name: Publish Ionctl as native AOT
+      - name: Publish Ionctl (non-AOT, self-contained)
         run: |
           dotnet publish ./src/Ionctl/Ionctl.csproj \
             -c Release \
-            -r linux-musl-x64 \
-            /p:PublishAot=true \
+            -r linux-x64 \
             /p:SelfContained=true \
             /p:PublishSingleFile=true \
+            /p:IncludeNativeLibrariesForSelfExtract=true \
             -o ./ionctl-out
 
       - name: Rename binary
-        run: mv ./ionctl-out/Ionctl ./ionctl-linux-x64
+        run: mv ./ionctl-out/Ionctl ./ionctl-linux-x64 && chmod +x ./ionctl-linux-x64
 
       - name: Upload release artifact
         uses: softprops/action-gh-release@v2
