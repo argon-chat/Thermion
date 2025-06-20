@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Ionctl": {
+      "commandName": "Project",
+      "commandLineArgs": "setup"
+    }
+  }
+}
