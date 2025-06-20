@@ -7,7 +7,6 @@
 		<Nullable>enable</Nullable>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<GlobalizationMode>Invariant</GlobalizationMode>
-		<PublishAot>True</PublishAot>
 	</PropertyGroup>
 
 	<ItemGroup>
