@@ -118,6 +118,17 @@ public class SetupCommand : AsyncCommand
 
     private async Task InstallDockerViaScript()
     {
+        var distro = await DetectDistroAsync();
+
+        if (!distro.Contains("debian", StringComparison.OrdinalIgnoreCase) &&
+            !distro.Contains("ubuntu", StringComparison.OrdinalIgnoreCase))
+        {
+            AnsiConsole.MarkupLine("[red]Docker installation via script is only supported on Debian-based systems.[/]");
+            AnsiConsole.MarkupLine("[yellow]Please install Docker manually for your distribution (e.g. using dnf/yum).[/]");
+            AnsiConsole.MarkupLine($"Detected distro: [blue]{distro}[/]");
+            return;
+        }
+
         AnsiConsole.MarkupLine("[yellow]Installing Docker via get.docker.com...[/]");
 
         var scriptCommand = File.Exists("/usr/bin/curl")
@@ -152,6 +163,27 @@ public class SetupCommand : AsyncCommand
             var error = await process.StandardError.ReadToEndAsync();
             AnsiConsole.MarkupLine($"[red]Docker install failed (exit code {process.ExitCode}):[/]\n{error}");
         }
+    }
+
+    private async Task<string> DetectDistroAsync()
+    {
+        try
+        {
+            var osRelease = await File.ReadAllTextAsync("/etc/os-release");
+            var lines = osRelease.Split('\n');
+
+            var idLine = lines.FirstOrDefault(l => l.StartsWith("ID=", StringComparison.OrdinalIgnoreCase));
+            if (idLine != null)
+            {
+                return idLine.Split('=')[1].Trim('"', '\'');
+            }
+        }
+        catch
+        {
+            // ignore and return unknown
+        }
+
+        return "unknown";
     }
 
     private void PromptManualLocation(ThermionConfig config)
