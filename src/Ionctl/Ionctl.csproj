@@ -14,11 +14,6 @@
 		<PackageReference Include="Spectre.Console" Version="0.50.0" />
 		<PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
 		<PackageReference Include="Docker.DotNet" Version="3.125.15" />
-
-		<PackageReference Include="Microsoft.DotNet.ILCompiler" Version="9.0.6" />
-		<PackageReference Include="runtime.linux-x64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
-		<PackageReference Include="runtime.osx-x64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
-		<PackageReference Include="runtime.win-x64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
 	</ItemGroup>
 
 </Project>
